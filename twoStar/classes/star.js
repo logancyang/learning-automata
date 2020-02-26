@@ -32,6 +32,8 @@ class Star {
     this.mass = mass;
     this.radius = this.mass * 24;
     this.colorSet = colorSet || whiteStarSet;
+    this.trajectory = [];
+    this.trajectoryColor = [random(200, 255), random(100, 255), 255, 150];
   }
 
   applyForce(force) {
@@ -42,11 +44,20 @@ class Star {
   update() {
     this.vel.add(this.acc);
     this.pos.add(this.vel);
+    this.trajectory.push(this.pos.copy());
     this.acc.mult(0);
   }
 
   show() {
-    _drawStar(this.pos.x, this.pos.y, this.radius, this.colorSet)
+    _drawStar(this.pos.x, this.pos.y, this.radius, this.colorSet);
+    // This is VERY IMPORTANT
+    noStroke();
+    fill(...this.trajectoryColor);
+    for (let i = 0; i < this.trajectory.length; i++) {
+      let pos = this.trajectory[i];
+      ellipse(pos.x, pos.y, 1);
+    }
+    // endShape();
   }
 
   /* Returns the gravitational force between this and aStar, direction aStar -> this */
@@ -54,7 +65,7 @@ class Star {
     let force = p5.Vector.sub(this.pos, aStar.pos);
     let distance = force.mag();
     // Limiting the distance to eliminate "extreme" results for very close or very far objects
-    distance = constrain(distance, 0.5, 10.0);
+    distance = constrain(distance, 2.0, 10.0);
     // Get direction unit vector
     force.normalize();
     // Calculate gravitional force magnitude

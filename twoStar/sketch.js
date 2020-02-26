@@ -1,3 +1,4 @@
+let fr = 30;
 const n = 2;
 let stars = [];
 
@@ -16,6 +17,8 @@ function computeCenterOfMass(stars) {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  frameRate(fr);
+  // colorMode();
 
   // Star 1
   let starParams = {
@@ -34,7 +37,8 @@ function setup() {
     y: windowHeight*0.5,
     mass: 0.5,
     vx: 0,
-    vy: -0.5
+    vy: -0.5,
+    colorSet: pinkStarSet
   }
   newStar = new Star(starParams);
   stars.push(newStar);
@@ -42,9 +46,11 @@ function setup() {
 
 function draw() {
   background(0);
-  let centerOfMass = computeCenterOfMass(stars);
-  fill(255, 0, 0);
-  ellipse(centerOfMass.x, centerOfMass.y, 8);
+
+  // let centerOfMass = computeCenterOfMass(stars);
+  // stroke(255, 0, 0);
+  // strokeWeight(5);
+  // point(centerOfMass.x, centerOfMass.y);
 
   for (let i = 0; i < stars.length; i++) {
     for (let j = 0; j < stars.length; j++) {
