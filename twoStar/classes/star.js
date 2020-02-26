@@ -6,6 +6,7 @@ const pinkStarSet = {
   core: [255, 255, 255],
   halo: [250, 222, 226]
 }
+const TRAIL_LENGTH = 300;
 
 function _drawStar(x, y, r, colorSet) {
   fill(...colorSet.core);
@@ -18,22 +19,27 @@ function _drawStar(x, y, r, colorSet) {
   for (let j = r; j < glowRadius; j++) {
     noFill();
     strokeWeight(1);
-    stroke(...colorSet.halo, 255.0 * r*r*r/(j*j*j));
+    stroke(...colorSet.halo, 255.0 * r * r * r / (j * j * j));
     ellipse(x, y, j);
   }
 }
 
 class Star {
   constructor(starParams) {
-    const {x, y, mass, vx, vy, colorSet} = starParams;
+    const { x, y, mass, vx, vy, gConstant, colorSet, showTrail } = starParams;
     this.pos = createVector(x, y);
     this.vel = createVector(vx, vy);
     this.acc = createVector(0, 0);
     this.mass = mass;
     this.radius = this.mass * 24;
+    this.gConstant = gConstant;
     this.colorSet = colorSet || whiteStarSet;
-    this.trajectory = [];
-    this.trajectoryColor = [random(200, 255), random(100, 255), 255, 150];
+    this.trail = [];
+    // For picking points in trail every n update() calls
+    this.counter = 0;
+    this.trailSamplingFreq = 5;
+    this.trailColor = [...this.colorSet.halo, 150];
+    this.showTrail = showTrail;
   }
 
   applyForce(force) {
@@ -42,30 +48,31 @@ class Star {
   }
 
   update() {
+    this.counter += 1;
     this.vel.add(this.acc);
     this.pos.add(this.vel);
-    // Maintain a queue of trajectory points
-    if (this.trajectory.length < 100) {
-      this.trajectory.push(this.pos.copy());
+    // Maintain a queue of trail points
+    if ((this.trail.length < TRAIL_LENGTH) && (this.counter % this.trailSamplingFreq == 0)) {
+      this.trail.push(this.pos.copy());
     } else {
-      while (this.trajectory.length >= 500) {
-        this.trajectory.shift();
+      while (this.trail.length >= TRAIL_LENGTH) {
+        this.trail.shift();
       }
-      this.trajectory.push(this.pos.copy());
     }
     this.acc.mult(0);
   }
 
   show() {
     _drawStar(this.pos.x, this.pos.y, this.radius, this.colorSet);
-    // This is VERY IMPORTANT
-    noStroke();
-    fill(...this.trajectoryColor);
-    for (let i = 0; i < this.trajectory.length; i++) {
-      let pos = this.trajectory[i];
-      ellipse(pos.x, pos.y, 2);
+    if (this.showTrail) {
+      // This is VERY IMPORTANT! Or the stroke will make the trail black and invisible
+      noStroke();
+      fill(...this.trailColor);
+      for (let i = 0; i < this.trail.length; i++) {
+        let pos = this.trail[i];
+        ellipse(pos.x, pos.y, 1);
+      }
     }
-    // endShape();
   }
 
   getDistance(aStar) {
@@ -82,7 +89,7 @@ class Star {
     // Get direction unit vector
     force.normalize();
     // Calculate gravitional force magnitude
-    let strength = (g * this.mass * aStar.mass) / (distance * distance);
+    let strength = (this.gConstant * this.mass * aStar.mass) / (distance * distance);
     force.mult(strength);
     return force;
   }
