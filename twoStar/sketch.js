@@ -1,9 +1,15 @@
 let fr = 30;
 const n = 2;
 let stars = [];
+let distance;
 
 // Fake gravitational constant
-let g = 1;
+let g = 10;
+
+let fontRegular;
+function preload() {
+  fontRegular = loadFont('assets/digital-7.ttf');
+}
 
 function computeCenterOfMass(stars) {
   const totalMass = stars.map(star => star.mass).reduce((prev, next) => prev + next);
@@ -22,22 +28,22 @@ function setup() {
 
   // Star 1
   let starParams = {
-    x: windowWidth*0.45,
+    x: windowWidth*0.4,
     y: windowHeight*0.5,
     mass: 0.5,
     vx: 0,
-    vy: 0.5
+    vy: 4
   }
   let newStar = new Star(starParams);
   stars.push(newStar);
 
   // Star 2
   starParams = {
-    x: windowWidth*0.55,
+    x: windowWidth*0.6,
     y: windowHeight*0.5,
     mass: 0.5,
     vx: 0,
-    vy: -0.5,
+    vy: -4,
     colorSet: pinkStarSet
   }
   newStar = new Star(starParams);
@@ -63,4 +69,11 @@ function draw() {
     stars[i].update();
     stars[i].show();
   }
+
+  distance = stars[0].getDistance(stars[1]);
+  textSize(24);
+  textFont(fontRegular);
+  noStroke();
+  fill(255);
+  text(`Distance:  ${distance.toPrecision(4)}`, 50, 50);
 }

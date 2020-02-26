@@ -44,7 +44,15 @@ class Star {
   update() {
     this.vel.add(this.acc);
     this.pos.add(this.vel);
-    this.trajectory.push(this.pos.copy());
+    // Maintain a queue of trajectory points
+    if (this.trajectory.length < 100) {
+      this.trajectory.push(this.pos.copy());
+    } else {
+      while (this.trajectory.length >= 500) {
+        this.trajectory.shift();
+      }
+      this.trajectory.push(this.pos.copy());
+    }
     this.acc.mult(0);
   }
 
@@ -55,9 +63,14 @@ class Star {
     fill(...this.trajectoryColor);
     for (let i = 0; i < this.trajectory.length; i++) {
       let pos = this.trajectory[i];
-      ellipse(pos.x, pos.y, 1);
+      ellipse(pos.x, pos.y, 2);
     }
     // endShape();
+  }
+
+  getDistance(aStar) {
+    let force = p5.Vector.sub(this.pos, aStar.pos);
+    return force.mag();
   }
 
   /* Returns the gravitational force between this and aStar, direction aStar -> this */
