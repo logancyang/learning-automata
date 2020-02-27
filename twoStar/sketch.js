@@ -77,7 +77,7 @@ function setup() {
 
   // Star 1
   let starParams = {
-    x: windowWidth*0.4,
+    x: windowWidth*0.5-200,
     y: windowHeight*0.5,
     mass: 0.5,
     vx: 0,
@@ -89,7 +89,7 @@ function setup() {
 
   // Star 2
   starParams = {
-    x: windowWidth*0.6,
+    x: windowWidth*0.5+200,
     y: windowHeight*0.5,
     mass: 0.5,
     vx: 0,
