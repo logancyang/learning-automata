@@ -24,9 +24,22 @@ function _drawStar(x, y, r, colorSet) {
   }
 }
 
+function renderStar(star, showTrail) {
+  star.show();
+  if (showTrail) {
+    // This is VERY IMPORTANT! Or the stroke will make the trail black and invisible
+    noStroke();
+    fill(...star.trailColor);
+    for (let i = 0; i < star.trail.length; i++) {
+      let pos = star.trail[i];
+      ellipse(pos.x, pos.y, 1);
+    }
+  }
+}
+
 class Star {
   constructor(starParams) {
-    const { x, y, mass, vx, vy, gConstant, colorSet, showTrail } = starParams;
+    const { x, y, mass, vx, vy, gConstant, colorSet } = starParams;
     this.pos = createVector(x, y);
     this.vel = createVector(vx, vy);
     this.acc = createVector(0, 0);
@@ -37,9 +50,8 @@ class Star {
     this.trail = [];
     // For picking points in trail every n update() calls
     this.counter = 0;
-    this.trailSamplingFreq = 5;
+    this.trailSamplingInterval = 5;
     this.trailColor = [...this.colorSet.halo, 150];
-    this.showTrail = showTrail;
   }
 
   applyForce(force) {
@@ -52,7 +64,7 @@ class Star {
     this.vel.add(this.acc);
     this.pos.add(this.vel);
     // Maintain a queue of trail points
-    if ((this.trail.length < TRAIL_LENGTH) && (this.counter % this.trailSamplingFreq == 0)) {
+    if ((this.trail.length < TRAIL_LENGTH) && (this.counter % this.trailSamplingInterval == 0)) {
       this.trail.push(this.pos.copy());
     } else {
       while (this.trail.length >= TRAIL_LENGTH) {
@@ -64,15 +76,6 @@ class Star {
 
   show() {
     _drawStar(this.pos.x, this.pos.y, this.radius, this.colorSet);
-    if (this.showTrail) {
-      // This is VERY IMPORTANT! Or the stroke will make the trail black and invisible
-      noStroke();
-      fill(...this.trailColor);
-      for (let i = 0; i < this.trail.length; i++) {
-        let pos = this.trail[i];
-        ellipse(pos.x, pos.y, 1);
-      }
-    }
   }
 
   getDistance(aStar) {

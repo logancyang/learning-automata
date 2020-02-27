@@ -147,7 +147,7 @@ return:  0                   1               2
 
 Perlin Noise is developed by Prof. Perlin at NYU in the 80s. On a high level, it is a technique to *make smoothness and achieve natural looking motions or textures*. Will use it more in the future.
 
-### 2. Vectors
+### 2. Vectors and Forces
 
 In Processing, there is a class `PVector`. In P5.js, the class is `p5.Vector` and can be created using
 
@@ -199,13 +199,52 @@ where ||N|| is the magnitude of the normal force from the surface, and vel_hat t
 
 Don't forget when calculating the friction, copy the velocity vector and do not change it in-place.
 
+### 3. Oscillations
+
+Rotation in Processing,
+
+```java
+// PI = 180 degrees, this is 45 degrees
+float angle = PI/4;
+float aVelocity = 0;
+float aAcceleration = 0.0001;
+
+void setup() {
+  size(800, 200);
+  smooth();
+}
+
+void draw() {
+  background(255);
 
 
+  fill(127);
+  stroke(0);
+  // Note that `rotate` has center at origin (0, 0),
+  // aka top left corner of the canvas, we need translate to
+  // make it centered
+  translate(width/2, height/2);
+  rectMode(CENTER);
+  rotate();
+  rect(0, 0, 64, 36);
 
+  angle += aVelocity;
+  aVelocity += aAcceleration;
+}
+```
 
+Polar coordinate
 
+```
+x = r * cos(a);
+y = r * sin(a);
+```
 
+Simple harmonic motion
 
+```
+
+```
 
 
 

@@ -1,16 +1,30 @@
 let fr = 30;
-const n = 2;
 const TRISOLARAN_DATE = "2418-02-26";
+
 let stars = [];
 let distance;
 let years, months;
 
+let bg, bgFlipped;
+let initBgWidth, initBgHeight;
+
 // Fake gravitational constant
 let G = 0.05;
+let showTrail;
 
 let fontRegular;
 function preload() {
   fontRegular = loadFont('assets/digital-7.ttf');
+  bg = loadImage('images/space-bg.jpg');
+  bgFlipped = loadImage('images/space-bg-flipped.jpg');
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+
+function mousePressed() {
+  showTrail = !showTrail;
 }
 
 function computeCenterOfMass(stars) {
@@ -59,7 +73,7 @@ function setup() {
   years = timeDiff.years;
   months = timeDiff.months;
 
-  const showTrail = false;
+  showTrail = false;
 
   // Star 1
   let starParams = {
@@ -68,8 +82,7 @@ function setup() {
     mass: 0.5,
     vx: 0,
     vy: 0.2,
-    gConstant: G,
-    showTrail
+    gConstant: G
   }
   let newStar = new Star(starParams);
   stars.push(newStar);
@@ -82,15 +95,20 @@ function setup() {
     vx: 0,
     vy: -0.2,
     gConstant: G,
-    colorSet: pinkStarSet,
-    showTrail
+    colorSet: pinkStarSet
   }
   newStar = new Star(starParams);
   stars.push(newStar);
 }
 
 function draw() {
-  background(0);
+  background(14, 35, 62);
+  const scale = 0.5;
+  const bgWidth = scale * bg.width;
+  const bgHeight = scale * bg.height;
+  imageMode(CORNER);
+  image(bg, 0, 0, bgWidth, bgHeight);
+  image(bgFlipped, bgWidth, 0, bgWidth, bgHeight);
 
   // let centerOfMass = computeCenterOfMass(stars);
   // stroke(255, 0, 0);
@@ -106,7 +124,8 @@ function draw() {
     }
 
     stars[i].update();
-    stars[i].show();
+    // stars[i].show();
+    renderStar(stars[i], showTrail);
   }
 
   textSize(22);
