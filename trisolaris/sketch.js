@@ -67,7 +67,6 @@ function getDistancesBetween(stars) {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   frameRate(fr);
-  // colorMode();
 
   const timeDiff = diffDate(new Date(), new Date(TRISOLARAN_DATE));
   years = timeDiff.years;
@@ -102,8 +101,8 @@ function setup() {
 }
 
 function draw() {
-  background(14, 35, 62);
-  const scale = 0.5;
+  background(0);
+  const scale = 0.8;
   const bgWidth = scale * bg.width;
   const bgHeight = scale * bg.height;
   imageMode(CORNER);

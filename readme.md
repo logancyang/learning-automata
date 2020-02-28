@@ -242,10 +242,42 @@ y = r * sin(a);
 
 Simple harmonic motion
 
+```java
+// Say period = 200, it means 200 frames are one period
+float x = amplitude * sin((frameCount / period) * TWO_PI);
+
+// But really we can just use one "angle" variable in sin()
+float x = amplitude * sin(angle);
 ```
 
+Springs
+
+```java
+// Bob: Mover class object
+class Mover {
+  PVector position;
+  PVector velocity;
+  PVector acceleration;
+
+  void applyForce() {};
+}
+
+class Spring {
+  float k;
+  float restLength;
+  // If we need moving anchor, we can have it as a Mover object
+  PVector anchor;
+
+  // This is powerful, Spring directly modifies Mover object
+  void connect(Mover m) {
+    // Calculates displacement, force
+    float force = ...;
+    // and then apply the force to m
+    m.applyForce(force);
+  };
+}
 ```
 
-
+It's good to use physics engine libraries to simulate complex spring systems.
 
 
