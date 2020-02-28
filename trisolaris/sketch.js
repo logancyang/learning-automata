@@ -6,7 +6,6 @@ let distance;
 let years, months;
 
 let bg, bgFlipped;
-let initBgWidth, initBgHeight;
 
 // Fake gravitational constant
 let G = 0.05;
@@ -23,7 +22,7 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
-function mousePressed() {
+function switchShowTrail() {
   showTrail = !showTrail;
 }
 
@@ -65,7 +64,14 @@ function getDistancesBetween(stars) {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  const canvas = createCanvas(windowWidth, 900);
+  canvas.parent("canvas-trisolaris");
+
+  for (let i = 0; i < 10; i++) {
+    const p = createP(`some gibberish number ${i}`);
+    p.parent("gibber");
+  }
+
   frameRate(fr);
 
   const timeDiff = diffDate(new Date(), new Date(TRISOLARAN_DATE));
@@ -73,6 +79,7 @@ function setup() {
   months = timeDiff.months;
 
   showTrail = false;
+  canvas.mousePressed(switchShowTrail);
 
   // Star 1
   let starParams = {
