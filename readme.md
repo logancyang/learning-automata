@@ -26,9 +26,8 @@ Part III: Intelligence
 - Evolution
 - Neural Networks
 
-## Video Lectures
 
-### 1. Introduction: Random Walker, Gaussian, Custom Distributions, Perlin Noise
+## 1. Introduction: Random Walker, Gaussian, Custom Distributions, Perlin Noise
 
 For a function that yields a standard Gaussian distribution (mean = 0, std = 1), we just add our mean and multiply by our stddev to everything the standard Gaussian yields.
 
@@ -143,11 +142,11 @@ it falls into.
 return:  0                   1               2
 ```
 
-#### Perlin Noise
+### Perlin Noise
 
 Perlin Noise is developed by Prof. Perlin at NYU in the 80s. On a high level, it is a technique to *make smoothness and achieve natural looking motions or textures*. Will use it more in the future.
 
-### 2. Vectors and Forces
+## 2. Vectors and Forces
 
 In Processing, there is a class `PVector`. In P5.js, the class is `p5.Vector` and can be created using
 
@@ -159,7 +158,7 @@ The class has vector math methods such as `add()`, `dot()`, `cross()`, `mag()`, 
 
 The constructor takes 2 or 3 arguments, depending on 2D or 3D.
 
-#### Static method for PVector in Processing (Java)
+### Static method for PVector in Processing (Java)
 
 ```java
 PVector f = new PVector(0, 1);
@@ -171,7 +170,7 @@ float mass = 2;
 PVector a = PVector.div(f, mass);
 ```
 
-#### Applying force with draw()
+### Applying force with draw()
 
 Since it's sometimes unnecessary to keep track time or # draw loops in a sketch, *we can re-apply force every frame*. In this case, **DO NOT forget to set acceleration to 0 (mult 0) after every frame udpate!**
 
@@ -189,7 +188,7 @@ If we do choose to apply the force with a parameter time, then we don't have to 
 
 *Takeaway, location and velocity are cumulative between frames, but always calculate force fresh every frame!*
 
-#### Simulate friction
+### Simulate friction
 
 ```
 friction = - mu * || N || * vel_hat
@@ -199,7 +198,7 @@ where ||N|| is the magnitude of the normal force from the surface, and vel_hat t
 
 Don't forget when calculating the friction, copy the velocity vector and do not change it in-place.
 
-### 3. Oscillations
+## 3. Oscillations
 
 Rotation in Processing,
 
@@ -280,4 +279,162 @@ class Spring {
 
 It's good to use physics engine libraries to simulate complex spring systems.
 
+
+## 4. Particle Systems
+
+Java ArrayList: `add(), get(), remove(), size()`
+
+```java
+ArrayList<Particle> particles = new ArrayList<Particle>();
+particles.add(new Particle());
+particles.get(<index>);
+particles.remove(<index>);
+// Enhanced Java loop
+// Con: can't modify the arraylist while in the loop
+for (Particle p: particles) {
+  p.update();
+  p.display();
+}
+
+// PROBLEM MODIFYING ARRAYLIST WHILE LOOPING:
+// If we want to remove from arraylist in the middle
+// the indices change, e.g. removing c from a, b, c, d, e
+// we do remove(2), and it
+// gives a, b, d, e, with d occupying index 2 now.
+// The loop goes on to i=3 and d is skipped
+// SOLUTION:
+// To avoid this when removing in the loop, LOOP BACKWARD
+for (int i = particles.size(); i >= 0; i--) {
+  if (particle.isDead()) {
+    particles.remove(i);
+  }
+  particles[i].update();
+  particles[i].display();
+}
+```
+
+JavaScript Array: `.push(), [i], .splice(i, numToBeRemoved), .length`
+
+Note: `.splice()` can also add items. [ref](https://www.w3schools.com/jsref/jsref_splice.asp)
+
+### Organize Particles into one ParticleSystem class
+
+```java
+class ParticleSystem {
+  ArrayList<Particle> particles;
+
+  ParticleSystem() {
+    particles = new ArrayList<Particle>();
+  }
+
+  void addParticle(Particle p) {
+    particles.add(p);
+  }
+
+  void run() {
+    ...
+  }
+}
+```
+
+A `ParticleSystem` class is essentially an `ArrayList` or `Particle`s. Its constructor
+should be initializing that ArrayList. It can also have a `centerPosition` where all its
+particles initialize at. It should be able to `addParticle()`, display all particles via
+a loop in `run()`, and more depending on the use cases.
+
+We can also have a `system of ParticleSystems` where it is an ArrayList of `ParticleSystem`s. We can assign properties to the system of systems and separate the functionality for each level of system.
+
+### Inheritance
+
+1. Inherit everything from super class
+2. Add data or funtionality
+3. Override functions
+4. `super` ! Call its parent's function
+
+```java
+// extends is the keyword for inheritance
+class Kitten extends Mammal {
+  int numWhiskers;
+
+  void sleep() {
+    println("purrrr");
+    super.sleep();
+  }
+
+  void meow() {}
+}
+```
+
+Another example
+
+```java
+// extends is the keyword for inheritance
+class SquareParticle extends Particle {
+  SquareParticle(PVector l) {
+    super(l);
+  }
+
+  void display() {
+    fill(127);
+    stroke(0);
+    rectMode(CENTER);
+    rect(location.x, location.y, 16, 16);
+  }
+}
+```
+
+### Polymorphism
+
+Polymorphism allows us to use child classes as type parent class, e.g.
+put child classes into one array of type parent class.
+
+Suppose we have a class `Animal`, and `Dog`, `Cat` extends it.
+
+```java
+Animal[] kingdom = new Animal[100];
+
+Animal spot = new Dog();
+kingdom[0] = new Dog();
+kingdom[1] = new Cat();
+...
+
+for (Animal a: kingdom) {
+  // This is powerful! These call their own subclass functions!
+  a.sleep();
+  a.eat();
+}
+```
+
+JavaScript ES6 has the same syntax `extends` and `super` as Java!
+
+Note that JS has differences between ES5 class syntax and ES6 ones.
+
+ES5 has
+
+```js
+function MyClass(params) {
+  this.params = params;
+}
+```
+
+while ES6 has
+
+```js
+class MyClass {
+  constructor(params) {
+    this.params;
+  }
+}
+```
+
+Here is a good [reference](https://javascript.info/class-inheritance).
+
+### Use Image Textures with Particles
+
+Processing uses `PImage` for images. Preload an image and don't load it in the constructor. Processing has `P2D` mode to render things much faster.
+
+There is this `blendMode` concept, with `blendMode(ADD)` all the RGB values are added
+on top of each other which creates a brighter effect.
+
+[Ref video](https://www.youtube.com/watch?v=nzDYHa6ursA&list=PLRqwX-V7Uu6Z9hI4mSgx2FlE5w8zvjmEy&index=9)
 
