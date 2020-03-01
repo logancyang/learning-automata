@@ -121,21 +121,6 @@ function draw() {
   // strokeWeight(5);
   // point(centerOfMass.x, centerOfMass.y);
 
-
-  // Since applyForce is on a single object (unidirectional)
-  // mutual force must be added twice
-  // for (let i = 0; i < stars.length; i++) {
-  //   for (let j = 0; j < stars.length; j++) {
-  //     if (i != j) {
-  //       force = stars[j].attract(stars[i]);
-  //       stars[i].applyForce(force);
-  //     }
-  //   }
-
-  //   stars[i].update();
-  //   stars[i].show(showTrail);
-  // }
-
   starSystem.run(showTrail);
 
   textSize(22);
