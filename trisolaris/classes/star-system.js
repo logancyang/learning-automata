@@ -7,7 +7,7 @@ class StarSystem {
     this.stars.push(star);
   }
 
-  run(showTrail) {
+  run() {
     // const attractions = {};
     // Since the attraction is mutual, each edge adds two forces
     // star i <-> j, and j > i
@@ -24,7 +24,7 @@ class StarSystem {
       }
 
       this.stars[i].update();
-      this.stars[i].show(showTrail);
+      this.stars[i].show();
     }
     // return attractions;
   }

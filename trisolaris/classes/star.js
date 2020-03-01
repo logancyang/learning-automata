@@ -71,25 +71,24 @@ class Star {
     this.acc.mult(0);
   }
 
-  show(showTrail) {
+  show() {
     _drawStar(this.pos.x, this.pos.y, this.radius, this.colorSet);
-    if (showTrail) {
-      if (this.name) {
-        textSize(18);
-        textFont(fontRegular);
-        noStroke();
-        fill(0, 225, 255);
-        smooth();
-        text(`${this.name}`, this.pos.x + 25, this.pos.y);
-      }
 
-      // This is VERY IMPORTANT! Or the stroke will make the trail black and invisible
+    if (this.name) {
+      textSize(18);
+      textFont(fontRegular);
       noStroke();
-      fill(...this.trailColor);
-      for (let i = 0; i < this.trail.length; i++) {
-        let pos = this.trail[i];
-        ellipse(pos.x, pos.y, this.trailThickness);
-      }
+      fill(0, 225, 255);
+      smooth();
+      text(`${this.name}`, this.pos.x + 25, this.pos.y);
+    }
+
+    // This is VERY IMPORTANT! Or the stroke will make the trail black and invisible
+    noStroke();
+    fill(...this.trailColor);
+    for (let i = 0; i < this.trail.length; i++) {
+      let pos = this.trail[i];
+      ellipse(pos.x, pos.y, this.trailThickness);
     }
   }
 
