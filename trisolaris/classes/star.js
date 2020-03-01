@@ -6,6 +6,12 @@ const pinkStarSet = {
   core: [255, 255, 255],
   halo: [250, 222, 226]
 }
+const blueStarSet = {
+  core: [0, 225, 255],
+  halo: [0, 225, 255]
+}
+
+
 const TRAIL_LENGTH = 300;
 
 function _drawStar(x, y, r, colorSet) {
@@ -26,7 +32,9 @@ function _drawStar(x, y, r, colorSet) {
 
 class Star {
   constructor(starParams) {
-    const { x, y, mass, vx, vy, gConstant, colorSet } = starParams;
+    const {
+      x, y, mass, vx, vy, gConstant, colorSet, trailThickness, name
+    } = starParams;
     this.pos = createVector(x, y);
     this.vel = createVector(vx, vy);
     this.acc = createVector(0, 0);
@@ -39,6 +47,8 @@ class Star {
     this.counter = 0;
     this.trailSamplingInterval = 5;
     this.trailColor = [...this.colorSet.halo, 150];
+    this.trailThickness = trailThickness || 3;
+    this.name = name;
   }
 
   applyForce(force) {
@@ -64,25 +74,34 @@ class Star {
   show(showTrail) {
     _drawStar(this.pos.x, this.pos.y, this.radius, this.colorSet);
     if (showTrail) {
+      if (this.name) {
+        textSize(18);
+        textFont(fontRegular);
+        noStroke();
+        fill(0, 225, 255);
+        smooth();
+        text(`${this.name}`, this.pos.x + 25, this.pos.y);
+      }
+
       // This is VERY IMPORTANT! Or the stroke will make the trail black and invisible
       noStroke();
       fill(...this.trailColor);
       for (let i = 0; i < this.trail.length; i++) {
         let pos = this.trail[i];
-        ellipse(pos.x, pos.y, 1);
+        ellipse(pos.x, pos.y, this.trailThickness);
       }
     }
   }
 
   getDistance(aStar) {
     let force = p5.Vector.sub(this.pos, aStar.pos);
-    return force.mag();
+    return force.mag() / 100;
   }
 
   /* Returns the gravitational force between this and aStar, direction aStar -> this */
   attract(aStar) {
     let force = p5.Vector.sub(this.pos, aStar.pos);
-    let distance = force.mag();
+    let distance = force.mag() / 100;
     // Limiting the distance to eliminate "extreme" results for very close or very far objects
     distance = constrain(distance, 2.0, 10.0);
     // Get direction unit vector
