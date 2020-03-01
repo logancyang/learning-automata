@@ -24,19 +24,6 @@ function _drawStar(x, y, r, colorSet) {
   }
 }
 
-function renderStar(star, showTrail) {
-  star.show();
-  if (showTrail) {
-    // This is VERY IMPORTANT! Or the stroke will make the trail black and invisible
-    noStroke();
-    fill(...star.trailColor);
-    for (let i = 0; i < star.trail.length; i++) {
-      let pos = star.trail[i];
-      ellipse(pos.x, pos.y, 1);
-    }
-  }
-}
-
 class Star {
   constructor(starParams) {
     const { x, y, mass, vx, vy, gConstant, colorSet } = starParams;
@@ -74,8 +61,17 @@ class Star {
     this.acc.mult(0);
   }
 
-  show() {
+  show(showTrail) {
     _drawStar(this.pos.x, this.pos.y, this.radius, this.colorSet);
+    if (showTrail) {
+      // This is VERY IMPORTANT! Or the stroke will make the trail black and invisible
+      noStroke();
+      fill(...this.trailColor);
+      for (let i = 0; i < this.trail.length; i++) {
+        let pos = this.trail[i];
+        ellipse(pos.x, pos.y, 1);
+      }
+    }
   }
 
   getDistance(aStar) {

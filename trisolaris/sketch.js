@@ -1,7 +1,7 @@
 let fr = 30;
 const TRISOLARAN_DATE = "2418-02-26";
 
-let stars = [];
+const starSystem = new StarSystem();
 let distance;
 let years, months;
 
@@ -91,7 +91,7 @@ function setup() {
     gConstant: G
   }
   let newStar = new Star(starParams);
-  stars.push(newStar);
+  starSystem.addStar(newStar);
 
   // Star 2
   starParams = {
@@ -104,7 +104,7 @@ function setup() {
     colorSet: pinkStarSet
   }
   newStar = new Star(starParams);
-  stars.push(newStar);
+  starSystem.addStar(newStar);
 }
 
 function draw() {
@@ -121,24 +121,28 @@ function draw() {
   // strokeWeight(5);
   // point(centerOfMass.x, centerOfMass.y);
 
-  for (let i = 0; i < stars.length; i++) {
-    for (let j = 0; j < stars.length; j++) {
-      if (i != j) {
-        force = stars[j].attract(stars[i]);
-        stars[i].applyForce(force);
-      }
-    }
 
-    stars[i].update();
-    // stars[i].show();
-    renderStar(stars[i], showTrail);
-  }
+  // Since applyForce is on a single object (unidirectional)
+  // mutual force must be added twice
+  // for (let i = 0; i < stars.length; i++) {
+  //   for (let j = 0; j < stars.length; j++) {
+  //     if (i != j) {
+  //       force = stars[j].attract(stars[i]);
+  //       stars[i].applyForce(force);
+  //     }
+  //   }
+
+  //   stars[i].update();
+  //   stars[i].show(showTrail);
+  // }
+
+  starSystem.run(showTrail);
 
   textSize(22);
   textFont(fontRegular);
   noStroke();
   fill(0, 225, 255);
-  const distances = getDistancesBetween(stars);
-  text(`Distance:  ${distances[0].toPrecision(4)}`, 50, 50);
+  const distances = starSystem.getDistances();
+  text(`Distance:  ${distances['0, 1'].toPrecision(4)}`, 50, 50);
   text(`Trisolaran Fleet Arrival: ${years} years ${months} months`, 50, 80);
 }
