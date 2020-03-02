@@ -43,21 +43,23 @@ function showText(showEnglish) {
     textSize(18);
     text(`Trisolaris`, 50, 50);
     text(`Civilization Epoch:  ${starSystem.epoch}`, 80, 80);
-    text(`Distance to Star Alpha:  ${distances['0, 3'].toPrecision(2)}`, 80, 110);
-    text(`Surface Temperature:  ${distances['0, 3'].toPrecision(2)}`, 80, 140);
+    text(`End of Civilization Observed:  ${starSystem.observedCollapse}`, 80, 80+1*30);
+    text(`Distance to Star Alpha:  ${distances['0, 3'].toPrecision(2)}`, 80, 80+2*30);
+    text(`Surface Temperature:  ${distances['0, 3'].toPrecision(2)}`, 80, 80+3*30);
     text(
       `Fleet Arrival to Earth (in Earth time): `+
-      `${years} y ${months} m ${days} d`, 80, 170
+      `${years} y ${months} m ${days} d`, 80, 80+4*30
     );
-    text(`Reference Frame: System Center of Mass`, 50, 220);
+    text(`Reference Frame: System Center of Mass`, 50, 80+5*30);
   } else {
     textSize(22);
     text(`三体星`, 50, 50);
     text(`文明纪元:  ${starSystem.epoch}`, 80, 80);
-    text(`距离恒星Alpha:  ${distances['0, 3'].toPrecision(2)}`, 80, 110);
-    text(`表面温度:  ${distances['0, 3'].toPrecision(2)}`, 80, 140);
-    text(`距三体舰队到达地球: ${years} 年 ${months} 月 ${days} 天`, 80, 170);
-    text(`参照系：系统质心`, 50, 220);
+    text(`观测到文明灭亡:  ${starSystem.observedCollapse}`, 80, 80+1*30);
+    text(`距离恒星Alpha:  ${distances['0, 3'].toPrecision(2)}`, 80, 80+2*30);
+    text(`表面温度:  ${distances['0, 3'].toPrecision(2)}`, 80, 80+3*30);
+    text(`距三体舰队到达地球: ${years} 年 ${months} 月 ${days} 天`, 80, 80+4*30);
+    text(`参照系：系统质心`, 50, 80+5*30);
   }
 }
 

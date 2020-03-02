@@ -4,6 +4,7 @@ class StarSystem {
     // Fake gravitational constant
     this.gConstant = 0.02;
     this.epoch = epoch;
+    this.observedCollapse = 0;
     this.spaceWidth = spaceWidth;
     this.spaceHeight = spaceHeight;
   }
@@ -116,6 +117,7 @@ class StarSystem {
     for (const star of this.stars) {
       let pos = star.pos;
       if (pos.x < 0 || pos.x > spaceWidth || pos.y < 0 || pos.y > spaceHeight) {
+        this.observedCollapse += 1;
         return true;
       }
     }
