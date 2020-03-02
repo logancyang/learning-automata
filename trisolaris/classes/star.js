@@ -39,14 +39,14 @@ class Star {
     this.vel = createVector(vx, vy);
     this.acc = createVector(0, 0);
     this.mass = mass;
-    this.radius = this.mass * 24;
+    this.radius = Math.cbrt(this.mass) * 18;
     this.gConstant = gConstant;
     this.colorSet = colorSet || whiteStarSet;
     this.trail = [];
     // For picking points in trail every n update() calls
     this.counter = 0;
     this.trailSamplingInterval = 5;
-    this.trailColor = [...this.colorSet.halo, 150];
+    this.trailColor = [...this.colorSet.halo, 100];
     this.trailThickness = trailThickness || 3;
     this.name = name;
   }
@@ -72,8 +72,6 @@ class Star {
   }
 
   show() {
-    _drawStar(this.pos.x, this.pos.y, this.radius, this.colorSet);
-
     if (this.name) {
       textSize(18);
       textFont(fontRegular);
@@ -90,6 +88,8 @@ class Star {
       let pos = this.trail[i];
       ellipse(pos.x, pos.y, this.trailThickness);
     }
+    // Draw star last, so it is on top of the trail
+    _drawStar(this.pos.x, this.pos.y, this.radius, this.colorSet);
   }
 
   getDistance(aStar) {

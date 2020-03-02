@@ -1,16 +1,10 @@
-let fr = 15;
+let fr = 20;
 const TRISOLARAN_DATE = "2418-02-26";
+let starSystem;
 
-const starSystem = new StarSystem();
-let distance;
-let years, months;
-
+let years, months, days;
 let bg, bgFlipped;
-
-// Fake gravitational constant
-let G = 0.03;
 let showEnglish;
-let TRISOLARIS = 'trisolaris'
 
 let fontRegular;
 function preload() {
@@ -27,20 +21,10 @@ function switchLanguage() {
   showEnglish = !showEnglish;
 }
 
-function computeCenterOfMass(stars) {
-  const totalMass = stars.map(star => star.mass).reduce((prev, next) => prev + next);
-  let acc = createVector(0, 0);
-  for (const star of stars) {
-    let mr = p5.Vector.mult(star.pos, star.mass);
-    acc.add(mr);
-  }
-  return acc.div(totalMass);
-}
-
 function diffDate(startDate, endDate) {
   let b = moment(startDate);
   let a = moment(endDate);
-  const intervals = ['years', 'months'];
+  const intervals = ['years', 'months', 'days'];
   let output = {};
 
   for (const interval of intervals) {
@@ -51,61 +35,38 @@ function diffDate(startDate, endDate) {
   return output;
 }
 
-// Can only handle starIndex 0 -> 3
-function initStars(starIndex, angle) {
-  const starMasses = [0.5, 0.2, 0.2, 0.005];
-  const starVys = [0.2, -0.2, 0.2, 0.1];
-  // Position offset from center of canvas
-  const starOffsets = [-300, 295, 305, -310];
-  const starColorSets = [pinkStarSet, whiteStarSet, whiteStarSet, blueStarSet];
-  let trailThickness, name;
-  if (starIndex === 3) {
-    trailThickness = 2;
-    name = TRISOLARIS;
-  }
-
-  // Rotate velocity and position by random angle [-PI, PI]
-  const offsetVector = createVector(starOffsets[starIndex], 0);
-  const velocity = createVector(0, starVys[starIndex]);
-  offsetVector.rotate(angle);
-  velocity.rotate(angle);
-
-  return {
-    x: windowWidth*0.5+offsetVector.x,
-    y: windowHeight*0.5+offsetVector.y,
-    mass: starMasses[starIndex],
-    vx: velocity.x,
-    vy: velocity.y,
-    gConstant: G,
-    colorSet: starColorSets[starIndex],
-    trailThickness,
-    name
-  };
-}
-
 function showText(showEnglish) {
-  textSize(22);
   noStroke();
   fill(0, 225, 255);
   const distances = starSystem.getDistances();
   if (showEnglish) {
+    textSize(18);
     text(`Trisolaris`, 50, 50);
-    text(`Civilization Epoch:  8009`, 80, 80);
-    text(`Distance to Star A:  ${distances['0, 3'].toPrecision(2)}`, 80, 110);
+    text(`Civilization Epoch:  ${starSystem.epoch}`, 80, 80);
+    text(`Distance to Star Alpha:  ${distances['0, 3'].toPrecision(2)}`, 80, 110);
     text(`Surface Temperature:  ${distances['0, 3'].toPrecision(2)}`, 80, 140);
-    text(`Fleet Arrival to Earth (in Earth time): ${years} years ${months} months`, 80, 170);
+    text(
+      `Fleet Arrival to Earth (in Earth time): `+
+      `${years} y ${months} m ${days} d`, 80, 170
+    );
+    text(`Reference Frame: System Center of Mass`, 50, 220);
   } else {
+    textSize(22);
     text(`三体星`, 50, 50);
-    text(`文明纪元:  8009`, 80, 80);
-    text(`距离恒星A:  ${distances['0, 3'].toPrecision(2)}`, 80, 110);
+    text(`文明纪元:  ${starSystem.epoch}`, 80, 80);
+    text(`距离恒星Alpha:  ${distances['0, 3'].toPrecision(2)}`, 80, 110);
     text(`表面温度:  ${distances['0, 3'].toPrecision(2)}`, 80, 140);
-    text(`距三体舰队到达地球: ${years} 年 ${months} 月`, 80, 170);
+    text(`距三体舰队到达地球: ${years} 年 ${months} 月 ${days} 天`, 80, 170);
+    text(`参照系：系统质心`, 50, 220);
   }
 }
 
 function setup() {
-  const canvas = createCanvas(windowWidth, 900);
+  const canvas = createCanvas(windowWidth, 1000);
   canvas.parent("canvas-trisolaris");
+
+  const randomEpoch = int(random(8000, 10000));
+  starSystem = new StarSystem(randomEpoch, canvas.width, canvas.height);
 
   for (let i = 0; i < 10; i++) {
     const p = createP(`some gibberish number ${i}`);
@@ -117,22 +78,13 @@ function setup() {
   const timeDiff = diffDate(new Date(), new Date(TRISOLARAN_DATE));
   years = timeDiff.years;
   months = timeDiff.months;
+  days = timeDiff.days;
 
   showEnglish = true;
   canvas.mousePressed(switchLanguage);
 
-  const randAngle = random(-PI, PI);
-  const star0 = new Star(initStars(0, randAngle));
-  starSystem.addStar(star0);
-
-  const star1 = new Star(initStars(1, randAngle));
-  starSystem.addStar(star1);
-
-  const star2 = new Star(initStars(2, randAngle));
-  starSystem.addStar(star2);
-
-  const trisolaris = new Star(initStars(3, randAngle));
-  starSystem.addStar(trisolaris);
+  // Star initializations
+  starSystem.resetSystem(canvas.width, canvas.height);
 }
 
 function draw() {
@@ -146,7 +98,6 @@ function draw() {
 
   push();
   const centerOfMass = starSystem.getCenterOfMass();
-
   // Center canvas on center of mass
   let centerPos = createVector(centerOfMass.x-windowWidth/2, centerOfMass.y-windowHeight/2);
   translate(-centerPos.x, -centerPos.y)
@@ -154,6 +105,10 @@ function draw() {
   starSystem.run();
 
   pop();
+
+  if (starSystem.outOfBoundaries(canvas.width, canvas.height)) {
+    starSystem.resetSystem(canvas.width, canvas.height);
+  }
 
   showText(showEnglish);
 }
