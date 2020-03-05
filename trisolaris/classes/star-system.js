@@ -67,7 +67,7 @@ class StarSystem {
     const starMasses = [0.4, 0.2, 0.1, 0.001];
     const starVys = [0.2, -0.2, -0.1, 0.4];
     // Position offset from center of canvas
-    const starOffsets = [-300, 285, 315, -330];
+    const starOffsets = [-300, 280, 320, -330];
     const starColorSets = [pinkStarSet, whiteStarSet, whiteStarSet, blueStarSet];
     let trailThickness, name;
     if (starIndex === 3) {

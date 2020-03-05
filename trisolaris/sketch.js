@@ -103,7 +103,11 @@ function draw() {
   // Center canvas on center of mass
   let centerPos = createVector(centerOfMass.x-windowWidth/2, centerOfMass.y-windowHeight/2);
   translate(-centerPos.x, -centerPos.y)
-
+  // Center canvas on Star Alpha
+  // TODO: how to draw trails for this reference frame? Subtract star0.pos out of all trails?
+  // let star0 = starSystem.stars[0];
+  // let centerPos = createVector(star0.pos.x-windowWidth/2, star0.pos.y-windowHeight/2);
+  // translate(-centerPos.x, -centerPos.y)
   starSystem.run();
 
   pop();
