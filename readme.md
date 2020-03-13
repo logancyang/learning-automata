@@ -1,8 +1,6 @@
-# Nature of Code Notes
+# Nature of Code Notes by Logan Yang
 
-This is my note for studying the Nature of Code content and creating physics simulations.
-
-## Nature of Code table of content
+## Table of Content
 
 Part I: Creating Physics Engine
 
