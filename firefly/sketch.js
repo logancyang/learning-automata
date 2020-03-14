@@ -1,3 +1,5 @@
+let flyGroup;
+
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
@@ -5,6 +7,12 @@ function windowResized() {
 function setup() {
 	const canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent('canvas-landing');
+  flyGroup = new FireflyGroup({
+    numFlies: 100,
+    width: windowWidth,
+    height: windowHeight
+  })
+  flyGroup.initGroup();
 }
 
 function draw() {
@@ -13,4 +21,6 @@ function draw() {
   fill(255);
   textSize(22);
   text(`WELCOME`, windowWidth/2, windowHeight/2);
+
+  flyGroup.showGroup();
 }
