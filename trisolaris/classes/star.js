@@ -30,16 +30,17 @@ function _drawStar(x, y, r, colorSet) {
   }
 }
 
-class Star {
+class Star extends Particle {
   constructor(starParams) {
     const {
       x, y, mass, vx, vy, gConstant, colorSet, trailThickness, name
     } = starParams;
-    this.pos = createVector(x, y);
-    this.vel = createVector(vx, vy);
-    this.acc = createVector(0, 0);
-    this.mass = mass;
-    this.radius = Math.cbrt(this.mass) * 18;
+    let radius = Math.cbrt(mass) * 18;
+    let particleParams = {
+      x, y, radius, mass, vx, vy
+    }
+    super(particleParams);
+
     this.gConstant = gConstant;
     this.colorSet = colorSet || whiteStarSet;
     this.trail = [];
@@ -51,15 +52,9 @@ class Star {
     this.name = name;
   }
 
-  applyForce(force) {
-    let f = p5.Vector.div(force, this.mass);
-    this.acc.add(f)
-  }
-
   update() {
+    super.update();
     this.counter += 1;
-    this.vel.add(this.acc);
-    this.pos.add(this.vel);
     // Maintain a queue of trail points
     if ((this.trail.length < TRAIL_LENGTH) && (this.counter % this.trailSamplingInterval == 0)) {
       this.trail.push(this.pos.copy());
@@ -68,7 +63,6 @@ class Star {
         this.trail.shift();
       }
     }
-    this.acc.mult(0);
   }
 
   show() {

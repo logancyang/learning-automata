@@ -420,12 +420,41 @@ while ES6 has
 ```js
 class MyClass {
   constructor(params) {
-    this.params;
+    this.params = params;
   }
 }
 ```
 
+Inheritance with overriding constructor (must call super in a child constructor before using `this`, or it won't work)
+
+```js
+class ParentClass {
+  constructor(params) {
+    this.params = params;
+  }
+}
+
+class ChildClass extends ParentClass {
+  constructor(childParams) {
+    super(parentParams);
+    this.params = otherChildParams;
+  }
+}
+```
+
+When overriding another method: We can use `super.method()` in a Child method to call Parent method.
+
 Here is a good [reference](https://javascript.info/class-inheritance).
+
+To use code for base classes in different folders, put
+
+```html
+<script src="/absolute_path_to_js_file"></script>
+```
+
+in the header of html files, NOT `import` because it is not a module.
+
+TODO: Need to take note here for modules in the future.
 
 ### Use Image Textures with Particles
 
