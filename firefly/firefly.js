@@ -1,18 +1,17 @@
 const DEFAULTCOLORSET = [108, 240, 104];
-const GLOWALPHA = 150;
+const GLOWALPHA = 200;
 
 
 class Firefly extends Particle {
   constructor(fireflyParams) {
     const {
-      x, y, mass, radius, vx, vy, colorSet, offset, glow, mousePos, width, height
+      x, y, mass, radius, vx, vy, colorSet, offset, glow, width, height
     } = fireflyParams;
     let particleParams = {
       x, y, radius, mass, vx, vy
     }
     super(particleParams);
     this.colorSet = colorSet || DEFAULTCOLORSET;
-    this.mousePos = mousePos;
     // 1 offset is 1/500 of 2*PI
     this.offset = offset;
     this.width = width;
@@ -20,22 +19,42 @@ class Firefly extends Particle {
     this.glow = glow || false;
   }
 
-  randomFly() {
-    // TODO: Apply force at short intervals
+  randomFly(mousePos, mouseSpeed) {
     let randsin = Math.sin(this.offset/500 * 2*PI);
     const randX = random(-randsin, randsin);
     const randY = random(-randsin, randsin);
     const randForce = createVector(randX, randY);
+
+    // Create illusion of local perturbation by mouse speed
+    let repelForce = p5.Vector.sub(this.pos, mousePos);
+    let distance = repelForce.mag();
+    if (mouseSpeed && distance < 100) {
+      // Limiting the distance to eliminate "extreme" results for very close or very far objects
+      distance = constrain(distance, 15.0, 20.0);
+      // Get direction unit vector
+      repelForce.normalize();
+      // Calculate gravitional force magnitude
+      let strength = 10000 / (distance * distance);
+      repelForce.mult(strength);
+
+      randForce.mult(mouseSpeed * 5);
+      randForce.add(repelForce);
+    }
+
     super.applyForce(randForce);
   }
 
   update() {
     super.update();
     if (this.pos.x < 0 || this.pos.x > this.width) {
-      this.vel.x = -this.vel.x * 0.2;
+      this.vel.x = -this.vel.x * 0.5;
     }
     if (this.pos.y < this.height/3 || this.pos.y > this.height) {
-      this.vel.y = -this.vel.y * 0.2;
+      this.vel.y = -this.vel.y * 0.5;
+    }
+    // Apply velocity damping
+    if (this.vel.mag() > 0.5) {
+      this.vel.mult(0.8);
     }
   }
 
@@ -52,10 +71,6 @@ class Firefly extends Particle {
     ellipse(this.pos.x, this.pos.y, this.radius);
 
     this.offset++;
-  }
-
-  repel() {
-    // Use this.mousePos.x this.mousePos.y to create a circle that repels the firefly
   }
 }
 
@@ -102,9 +117,9 @@ class FireflyGroup {
     }
   }
 
-  run() {
+  run(mousePos, mouseSpeed) {
     for (const firefly of this.fireflies) {
-      firefly.randomFly();
+      firefly.randomFly(mousePos, mouseSpeed);
       firefly.update();
       firefly.show();
       if (firefly.offset > 3000) {

@@ -23,5 +23,9 @@ function draw() {
   textSize(22);
   text(`WELCOME`, windowWidth/2, windowHeight/2);
 
-  flyGroup.run();
+  const mousePos = createVector(mouseX, mouseY);
+  const mouseXDiff = winMouseX - pwinMouseX;
+  const mouseYDiff = winMouseY - pwinMouseY;
+  const mouseSpeed = Math.sqrt(mouseXDiff*mouseXDiff + mouseYDiff*mouseYDiff);
+  flyGroup.run(mousePos, mouseSpeed);
 }
