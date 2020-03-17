@@ -1,6 +1,8 @@
 let fr = 20;
 const TRISOLARAN_DATE = "2418-02-26";
+const DISTANCE_THRESHOLD = 12;
 let starSystem;
+let distances;
 
 let years, months, days;
 let bg, bgFlipped;
@@ -35,10 +37,10 @@ function diffDate(startDate, endDate) {
   return output;
 }
 
-function showText(showEnglish) {
+function showText(showEnglish, distances) {
   noStroke();
   fill(0, 225, 255);
-  const distances = starSystem.getDistances();
+
   const triAlphaDistanceInMilMiles = distances['0, 3'] * 500 / 1.6;
   const triAlphaDistanceInMilKms = distances['0, 3'] * 5;
   if (showEnglish) {
@@ -107,9 +109,11 @@ function draw() {
 
   pop();
 
-  if (starSystem.outOfBoundaries(canvas.width, canvas.height)) {
+  // Epoch ends if one of the star is too far away
+  distances = starSystem.getDistances();
+  if (Math.max(Object.values(distances)) > DISTANCE_THRESHOLD) {
     starSystem.resetSystem(canvas.width, canvas.height);
   }
 
-  showText(showEnglish);
+  showText(showEnglish, distances);
 }
