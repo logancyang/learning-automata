@@ -13,19 +13,16 @@ function setup() {
     width: windowWidth,
     height: windowHeight
   })
+  canvas.position(0, 0);
+  canvas.style('z-index', '-1');
   flyGroup.initGroup();
 }
 
 function draw() {
   background(0, 0, 55);
-  noStroke();
-  fill(255);
-  textSize(22);
-  text(`WELCOME`, windowWidth/2, windowHeight/2);
 
   const mousePos = createVector(mouseX, mouseY);
-  const mouseXDiff = winMouseX - pwinMouseX;
-  const mouseYDiff = winMouseY - pwinMouseY;
-  const mouseSpeed = Math.sqrt(mouseXDiff*mouseXDiff + mouseYDiff*mouseYDiff);
+  const mouseVel = createVector(winMouseX - pwinMouseX, winMouseY - pwinMouseY);
+  const mouseSpeed = mouseVel.mag();
   flyGroup.run(mousePos, mouseSpeed);
 }

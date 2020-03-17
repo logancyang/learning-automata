@@ -1,5 +1,6 @@
 const DEFAULTCOLORSET = [108, 240, 104];
 const GLOWALPHA = 200;
+const MAX_VELOCITY = 0.5;
 
 
 class Firefly extends Particle {
@@ -53,7 +54,7 @@ class Firefly extends Particle {
       this.vel.y = -this.vel.y * 0.5;
     }
     // Apply velocity damping
-    if (this.vel.mag() > 0.5) {
+    if (this.vel.mag() > MAX_VELOCITY) {
       this.vel.mult(0.8);
     }
   }

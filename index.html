@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="learning automata">
+  <meta name="author" content="logan yang">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Learning Automata</title>
@@ -16,7 +19,15 @@
   <script src="firefly/firefly.js"></script>
   <script src="firefly/sketch.js"></script>
 
-  <style>
+  <!-- Bootstrap core CSS -->
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <!-- Custom styles for this template -->
+  <link href="cover.css" rel="stylesheet">
+
+  <!-- <style>
     body {
       margin:0;
       padding:0;
@@ -27,12 +38,83 @@
     p {
       text-align: center;
     }
-  </style>
+  </style> -->
 </head>
-<body>
+
+<body class="text-center">
   <div id="canvas-landing"></div>
-  <br/>
-  <p id="gibber">Welcome to Learning Automata</p>
-  <a href="trisolaris/trisolaris.html">trisolaris</a>
+
+  <div class="cover-container d-flex h-100 p-4 mx-auto flex-column">
+    <header class="masthead mb-auto">
+      <div class="inner">
+        <h3 class="masthead-brand">LEARNING AUTOMATA</h3>
+        <nav class="nav nav-masthead justify-content-center">
+          <a class="nav-link active" href="#">Home</a>
+          <a class="nav-link active" href="#">Simulations</a>
+          <a class="nav-link active" href="#">Blog</a>
+          <a class="nav-link" href="#">Videos</a>
+        </nav>
+      </div>
+    </header>
+
+    <main role="main" class="inner cover">
+      <h1 class="cover-heading"></h1>
+      <p class="lead">
+        Hi, I’m Logan (Chao) Yang, a machine learning engineer and creative coder.
+        My main interests are machine learning, physics and statistics simulation, math animation and music production.
+        I share my sketches, simulations, blog posts and videos here.
+      </p>
+      <p class="lead">Connect with me on social media</p>
+      <a href="https://www.twitter.com/logancyang" target="_blank">
+        <button class="js-sharing-popup-twitter" style="border-color: rgba(0, 0, 0, 0.35);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="34" viewBox="0 0 24 24"
+            class="twtr-icon  twtr-color-fill--blue-dark  has-hover">
+            <path opacity="0" d="M0 0h24v24H0z"></path>
+            <path
+              d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z">
+            </path>
+          </svg>
+        </button>
+      </a>
+      <a href="https://www.linkedin.com/in/loganyang" target="_blank">
+        <button class="js-sharing-popup-linkedin" href="linkedin" style="border-color: rgba(0, 0, 0, 0.35);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="34" viewBox="0 0 24 24"
+            class="twtr-icon  twtr-color-fill--blue-dark  has-hover">
+            <rect height="11" width="4" x="3" y="9"></rect>
+            <circle cx="5" cy="5" r="2"></circle>
+            <path
+              d="M16.5,8.25A4.47251,4.47251,0,0,0,13,9.95343V9H9V20h4V13a2,2,0,0,1,4,0v7h4V12.75A4.5,4.5,0,0,0,16.5,8.25Z">
+            </path>
+          </svg>
+        </button>
+      </a>
+      </br>
+      </br>
+      </br>
+      <p class="lead">
+        <a href="#" class="btn btn-lg btn-secondary">Simulations</a>
+      </p>
+    </main>
+
+    <footer class="mastfoot mt-auto">
+      <div class="inner">
+        <p>&copy <a href="https://twitter.com/logancyang">Logan Yang</a>.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>
