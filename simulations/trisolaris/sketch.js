@@ -70,11 +70,6 @@ function setup() {
   const randomEpoch = int(random(8000, 10000));
   starSystem = new StarSystem(randomEpoch, canvas.width, canvas.height);
 
-  for (let i = 0; i < 10; i++) {
-    const p = createP(`some gibberish number ${i}`);
-    p.parent("gibber");
-  }
-
   frameRate(fr);
 
   const timeDiff = diffDate(new Date(), new Date(TRISOLARAN_DATE));
