@@ -26,6 +26,7 @@ a:hover {
 
 html,
 body {
+  margin: 0;
   height: 100%;
 }
 
@@ -42,7 +43,7 @@ body {
 }
 
 .cover-container {
-  max-width: 42em;
+  max-width: 60em;
 }
 
 
@@ -106,4 +107,68 @@ body {
  */
 .mastfoot {
   color: rgba(255, 255, 255, .5);
+}
+
+#canvas-landing {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -9999;
+}
+
+#main-scrollable {
+  overflow: auto;
+}
+
+#main-scrollable::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
+
+.arrows {
+  width: 60px;
+  height: 72px;
+  position: absolute;
+  left: 50%;
+  margin-left: -30px;
+  bottom: 20px;
+}
+
+.arrows path {
+  stroke: #2994D1;
+  fill: transparent;
+  stroke-width: 1px;
+  animation: arrow 2s infinite;
+  -webkit-animation: arrow 2s infinite;
+}
+
+@keyframes arrow
+{
+0% {opacity:0}
+40% {opacity:1}
+80% {opacity:0}
+100% {opacity:0}
+}
+
+@-webkit-keyframes arrow
+{
+0% {opacity:0}
+40% {opacity:1}
+80% {opacity:0}
+100% {opacity:0}
+}
+
+.arrows path.a1 {
+  animation-delay:-1s;
+  -webkit-animation-delay:-1s;
+}
+
+.arrows path.a2 {
+  animation-delay:-0.5s;
+  -webkit-animation-delay:-0.5s;
+}
+
+.arrows path.a3 {
+  animation-delay:0s;
+  -webkit-animation-delay:0s;
 }

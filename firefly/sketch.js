@@ -13,8 +13,10 @@ function setup() {
     width: windowWidth,
     height: windowHeight
   })
-  canvas.position(0, 0);
-  canvas.style('z-index', '-1');
+  // canvas.position(0, 0);
+  // canvas.style('position', 'fixed');
+  // canvas.style('display', 'block');
+  // canvas.style('z-index', '-9999');
   flyGroup.initGroup();
 }
 
