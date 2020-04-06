@@ -63,7 +63,7 @@ class Firefly extends Particle {
     // Draw the firefly and apply glowing, which is changing alpha
     let currentAlpha = GLOWALPHA;
     if (this.glow) {
-      currentAlpha = (Math.sin(this.offset/500 * 2*PI)+0.3) * GLOWALPHA;
+      currentAlpha = (Math.sin(this.offset/300 * 2*PI)+0.2) * GLOWALPHA;
     }
 
     fill(...this.colorSet, currentAlpha);
