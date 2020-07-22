@@ -10,10 +10,10 @@ const buckets = [];
 
 const P_RADIUS = 9;
 const PLINKO_RADIUS = 5;
-const NCOLS = 35;
+const NCOLS = 20;
 const NROWS = 18;
 const DROP_INTERVAL = 20;
-const PLINKO_WIDTH = 1000;
+const PLINKO_WIDTH = 600;
 const PLINKO_HEIGHT = 800;
 const PLINKO_COLOR = [200, 50, 80];
 
