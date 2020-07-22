@@ -1,6 +1,7 @@
 const Engine = Matter.Engine;
 const World = Matter.World;
 const Bodies = Matter.Bodies;
+const Events = Matter.Events;
 
 let engine;
 let world;
@@ -12,20 +13,40 @@ const P_RADIUS = 9;
 const PLINKO_RADIUS = 5;
 const NCOLS = 20;
 const NROWS = 18;
-const DROP_INTERVAL = 20;
+const DROP_INTERVAL = 50;
 const PLINKO_WIDTH = 600;
 const PLINKO_HEIGHT = 800;
 const PLINKO_COLOR = [200, 50, 80];
+const RING_INTERVAL = 5;
 
 let ground;
+let ding;
+
+// function preload() {
+//   ding = loadSound('/assets/vibraphone-ding.mp3');
+// }
+
+// function collideSound(event) {
+//   const pairs = event.pairs;
+//   for (const pair of pairs) {
+//     const labelA = pair.bodyA.label;
+//     const labelB = pair.bodyB.label;
+//     if (labelA === 'ground' && labelB === 'particle') {
+//       ding.play();
+//     }
+//   }
+// }
 
 function setup() {
   createCanvas(PLINKO_WIDTH, PLINKO_HEIGHT);
   colorMode(HSB);
   engine = Engine.create();
   world = engine.world;
+  // Add collision sound effect: vibraphone
+  // Events.on(engine, 'collisionEnd', collideSound);
   // Add ground
-  ground = new Boundary(PLINKO_WIDTH/2, PLINKO_HEIGHT, PLINKO_WIDTH, 50, 0);
+  ground = new Boundary(
+    PLINKO_WIDTH/2, PLINKO_HEIGHT, PLINKO_WIDTH, 50, 0, {label: 'ground'});
   // Add plinkos
   const spacing = width / NCOLS;
   // varying x, fixed y -> row, go thru NCOLS
@@ -36,7 +57,7 @@ function setup() {
       if (j % 2 === 1) {
          x += spacing/2;
       }
-      let y = j * spacing + spacing;
+      const y = j * spacing + spacing;
       plinkos.push(new Particle(
         x, y, PLINKO_RADIUS,
         {isStatic: true, color: PLINKO_COLOR}
@@ -66,7 +87,7 @@ function draw() {
   // Add particles
   if (frameCount % DROP_INTERVAL === 0) {
     particles.push(new Particle(
-      PLINKO_WIDTH/2, 5, P_RADIUS, {randomOffset: true}
+      PLINKO_WIDTH/2, 5, P_RADIUS, {randomOffset: true, label: 'particle'}
     ));
   }
 

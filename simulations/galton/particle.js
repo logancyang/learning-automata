@@ -3,7 +3,7 @@ class Particle {
     const options = {
       ...opts,
       friction: 0.8,
-      restitution: 0.5
+      restitution: 0.2
     };
     if (options.randomOffset) {
       x += random(-4, 4);
@@ -37,8 +37,9 @@ class Particle {
 }
 
 class Boundary {
-  constructor(x, y, w, h, a) {
+  constructor(x, y, w, h, a, opts) {
     const options = {
+      ...opts,
       friction: 0.8,
       restitution: 0,
       angle: a,
