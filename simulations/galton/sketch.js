@@ -9,13 +9,13 @@ const particles = [];
 const plinkos = [];
 const buckets = [];
 
-const P_RADIUS = 9;
-const PLINKO_RADIUS = 5;
-const NCOLS = 20;
-const NROWS = 18;
+const P_RADIUS = 7;
+const PLINKO_RADIUS = 3;
+const NCOLS = 19;
+const NROWS = 19;
 const DROP_INTERVAL = 50;
-const PLINKO_WIDTH = 600;
-const PLINKO_HEIGHT = 800;
+const PLINKO_WIDTH = 370  ;
+const PLINKO_HEIGHT = 600;
 const PLINKO_COLOR = [200, 50, 80];
 const RING_INTERVAL = 5;
 
