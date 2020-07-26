@@ -1,13 +1,19 @@
 class Leaf {
   constructor() {
-    this.pos = createVector(random(width), random(height));
+    const randX = randomGaussian(width/2, width/6);
+    const randY = randomGaussian(height/2, height/6);
+    const randZ = randomGaussian(depth/2, depth/6);
+    this.pos = createVector(randX, randY, randZ);
     this.reached = false;
   }
 
   show() {
-    fill(255);
+    fill(125);
     noStroke();
-    ellipse(this.pos.x, this.pos.y, 4, 4);
+    push();
+    translate(this.pos.x, this.pos.y, this.pos.z);
+    sphere(0.8);
+    pop();
   }
 }
 
@@ -20,14 +26,11 @@ class Branch {
     this.originDir = dir.copy();
     // # times surrounding leaves find this branch as closest
     this.count = 0;
-    this.lenMultiplier = 5;
+    this.lenMultiplier = 60;
   }
 
   next() {
-    const minDir = p5.Vector.mult(this.dir, this.lenMultiplier);
-    let perturb = p5.Vector.random2D();
-    perturb.mult(2);
-    const newDir = p5.Vector.add(minDir, perturb);
+    const newDir = p5.Vector.mult(this.dir, this.lenMultiplier);
     const nextPos = p5.Vector.add(this.pos, newDir);
     return new Branch(this, nextPos, this.dir.copy());
   }
@@ -39,8 +42,11 @@ class Branch {
 
   show() {
     if (this.parent) {
-      stroke(255);
-      line(this.pos.x, this.pos.y, this.parent.pos.x, this.parent.pos.y);
+      stroke(200);
+      line(
+        this.pos.x, this.pos.y, this.pos.z,
+        this.parent.pos.x, this.parent.pos.y, this.parent.pos.z
+      );
     }
   }
 }
@@ -52,8 +58,8 @@ class Tree {
     this.branches = [];
     this.showLeaves = opts.showLeaves;
 
-    const pos = createVector(width/2, height/2);
-    const dir = createVector(0, -1);
+    const pos = createVector(width/2, height/2, depth/2);
+    const dir = createVector(0, -1, 0);
     const root = new Branch(null, pos, dir);
     this.branches.push(root);
 
@@ -103,9 +109,16 @@ class Tree {
         // Found closestBranch for this leaf, grow a new branch
         // IMPORTANT: this is the part that determines the next branch's
         // magnitude and direction
-        let newDir = p5.Vector.sub(leaf.pos, closestBranch.pos);
-        newDir.normalize();
-        closestBranch.dir.add(newDir);
+        let genDir = p5.Vector.sub(leaf.pos, closestBranch.pos);
+        genDir.normalize();
+        const randnum = random(0, 1);
+        if (randnum < 0.3333) {
+          closestBranch.dir = createVector(genDir.x, 0, 0);
+        } else if (randnum > 0.3333 && randnum < 0.6666) {
+          closestBranch.dir = createVector(0, genDir.y, 0);
+        } else {
+          closestBranch.dir = createVector(0, 0, genDir.z);
+        }
         closestBranch.count++;
       }
     }
@@ -139,10 +152,13 @@ class Tree {
     for (let i = 0; i < this.branches.length; i++) {
       const b = this.branches[i];
       if (b.parent) {
-        const thickness = map(i, 0, this.branches.length, 4, 1);
-        strokeWeight(thickness);
-        stroke(255);
-        line(b.pos.x, b.pos.y, b.parent.pos.x, b.parent.pos.y);
+        // const thickness = map(i, 0, this.branches.length, 1.5, 0.5);
+        strokeWeight(1);
+        stroke(66, 192, 248);
+        line(
+          b.pos.x, b.pos.y, b.pos.z,
+          b.parent.pos.x, b.parent.pos.y, b.parent.pos.z
+        );
       }
     }
   }
