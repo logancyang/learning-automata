@@ -1,8 +1,8 @@
 class Leaf {
   constructor() {
-    const randX = randomGaussian(width/2, width/6);
-    const randY = randomGaussian(height/2, height/6);
-    const randZ = randomGaussian(depth/2, depth/6);
+    const randX = randomGaussian(width/2, width/4);
+    const randY = randomGaussian(height/2, height/4);
+    const randZ = randomGaussian(depth/2, depth/4);
     this.pos = createVector(randX, randY, randZ);
     this.reached = false;
   }
@@ -26,7 +26,7 @@ class Branch {
     this.originDir = dir.copy();
     // # times surrounding leaves find this branch as closest
     this.count = 0;
-    this.lenMultiplier = 60;
+    this.lenMultiplier = MULTIPLIER;
   }
 
   next() {
@@ -57,6 +57,8 @@ class Tree {
     this.leaves = [];
     this.branches = [];
     this.showLeaves = opts.showLeaves;
+    this.numFoundLeaves = [];
+    this.lastElemsLength = 30;
 
     const pos = createVector(width/2, height/2, depth/2);
     const dir = createVector(0, -1, 0);
@@ -88,6 +90,12 @@ class Tree {
   }
 
   grow() {
+    if (this.numFoundLeaves.length > this.lastElemsLength-1) {
+      const allEqual = arr => arr.every( v => v === arr[0] );
+      // If grow() has found all leaves it could find, skip execution
+      const foundAll = allEqual(this.numFoundLeaves);
+      if (foundAll) return true;
+    }
     // Look at all leaves.
     // For each leaf, find its closest branch that is in (MIN_DIST, MAX_DIST)
     for (const leaf of this.leaves) {
@@ -111,10 +119,17 @@ class Tree {
         // magnitude and direction
         let genDir = p5.Vector.sub(leaf.pos, closestBranch.pos);
         genDir.normalize();
-        const randnum = random(0, 1);
-        if (randnum < 0.3333) {
+        const genDirs = [
+          Math.abs(genDir.x), Math.abs(genDir.y), Math.abs(genDir.z)
+        ];
+        const indexOfMaxValue = genDirs.indexOf(Math.max(...genDirs));
+
+        // const randnum = random(0, 1);
+        // let prevDir = closestBranch.dir;
+
+        if (indexOfMaxValue === 0) {
           closestBranch.dir = createVector(genDir.x, 0, 0);
-        } else if (randnum > 0.3333 && randnum < 0.6666) {
+        } else if (indexOfMaxValue === 1) {
           closestBranch.dir = createVector(0, genDir.y, 0);
         } else {
           closestBranch.dir = createVector(0, 0, genDir.z);
@@ -125,7 +140,13 @@ class Tree {
 
     // Remove reached leaves
     for (let i = this.leaves.length-1; i >= 0; i--) {
-      if (this.leaves[i].reached) this.leaves.splice(i, 1);
+      if (this.leaves[i].reached) {
+        this.leaves.splice(i, 1);
+      }
+    }
+    this.numFoundLeaves.push(this.leaves.length);
+    if (this.numFoundLeaves.length > this.lastElemsLength) {
+      this.numFoundLeaves.shift();
     }
 
     // Find the branches to be grown on (closest to some leaves)
@@ -140,6 +161,8 @@ class Tree {
       // IMPORTANT: reset this branch
       branch.reset();
     }
+
+    return false;
   }
 
   show() {
