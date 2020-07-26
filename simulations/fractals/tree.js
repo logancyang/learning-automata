@@ -5,9 +5,9 @@ class Leaf {
   }
 
   show() {
-    fill(255);
+    fill(255, 255, 0);
     noStroke();
-    ellipse(this.pos.x, this.pos.y, 4, 4);
+    ellipse(this.pos.x, this.pos.y, 8, 8);
   }
 }
 
@@ -139,9 +139,9 @@ class Tree {
     for (let i = 0; i < this.branches.length; i++) {
       const b = this.branches[i];
       if (b.parent) {
-        const thickness = map(i, 0, this.branches.length, 4, 1);
+        const thickness = map(i, 0, this.branches.length, 3, 0.1);
         strokeWeight(thickness);
-        stroke(255);
+        stroke(	101, 67, 33);
         line(b.pos.x, b.pos.y, b.parent.pos.x, b.parent.pos.y);
       }
     }
