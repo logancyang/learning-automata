@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164976898-1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
     gtag('config', 'UA-164976898-1');
@@ -23,17 +24,50 @@
   <script src="/libraries/p5.sound.js"></script>
   <script src="sketch.js"></script>
 
+  <!-- Bootstrap core CSS -->
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
   <style>
     body {
-      margin:0;
-      padding:0;
-      overflow: hidden;
-    }
-    canvas {
-      margin:auto;
+      margin: auto;
+      padding: 0;
     }
   </style>
 </head>
+
 <body>
+  <div class="container">
+    <div id="sketch-holder" class="row" style="margin: 20px"></div>
+    <div id="sketch-reset" class="row" style="margin: 20px"></div>
+    <div id="sketch-slider" class="row" style="margin: 20px"></div>
+    <div id="mc-description" class="row" style="margin: 50px">
+      <p>To visualize the motivation behind rejection sampling, imagine graphing
+        the density function of a random variable onto a large rectangular board
+        and throwing darts at it. Assume that the darts are uniformly distributed
+        around the board. Now remove all of the darts that are outside the area
+        under the curve. The remaining darts will be distributed uniformly within
+        the area under the curve, and the x-positions of these darts will be
+        distributed according to the random variable's density. This is because
+        there is the most room for the darts to land where the curve is highest and
+        thus the probability density is greatest.</p>
+        <p>In this <a href="https://youtu.be/DfziDXHYoik">Nature of Code video</a> by Dan Shiffman, this algorithm is explained as the "2-number method".</p>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>

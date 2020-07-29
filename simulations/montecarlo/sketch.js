@@ -1,24 +1,43 @@
 let vals, norms;
 let drawLoop = 0;
 let done = false;
-let maxIter = 1000;
+let maxIter = 2000;
 let maxBinCount;
 let moveAvgs;
+let selected = 'gaussian';
+let distFunc;
 
-const WIDTH = 600;
+const WIDTH = 700;
 const HEIGHT = 400;
-const MULTIPLIER = 20;
+const MULTIPLIER = 30;
 
+// function mousePressed() {
+//   loop();
+// }
 
-function monteCarlo() {
+// function mouseReleased() {
+//   noLoop();
+// }
+
+function square(x) {
+  return x * x;
+}
+
+function gaussian(x) {
+  const u = 0.5;
+  const s = 0.1;
+  const z = (x - u)/s;
+  return Math.exp(-z*z/2) / (Math.sqrt(2*PI) * s);
+}
+
+function monteCarlo(func) {
   let foundOne = false;
   let iter = 0;
   let r1, r2;
   while (!foundOne && iter < 10000) {
     r1 = random(1);
     r2 = random(1);
-    // target function: y = x^2
-    target_y = r1 * r1;
+    target_y = func(r1);
     if (r2 < target_y) {
       foundOne = true;
       return r1;
@@ -40,29 +59,44 @@ function calcEWMA(values, alpha=0.1) {
   return movingAvgs;
 }
 
+function setDistFunc() {
+  if (selected === 'gaussian') {
+    distFunc = gaussian;
+  } else if (selected === 'square') {
+    distFunc = square;
+  }
+}
+
 
 function setup() {
   canvas = createCanvas(WIDTH, HEIGHT);
+  canvas.parent("sketch-holder");
   frameRate(120);
-  canvas.position(10, 10);
   canvas.style("outline", "black 3px solid");
 
+  slider = createSlider(500, 8000, maxIter, 100);
+  slider.parent("sketch-slider");
+  slider.style('width', '300px');
+  slider.style('margin', '10px');
+
+  sliderP = createP(slider.value());
+  sliderP.parent("sketch-slider");
+  sliderP.style('margin', '10px');;
+
+  setDistFunc();
+
   resetButton = createButton('Reset');
-  resetButton.position(450, HEIGHT + 20);
+  resetButton.parent("sketch-reset");
   resetButton.size(120, 40);
+  resetButton.style('margin', '10px');
   resetButton.mousePressed(() => {
     done = false;
     drawLoop = 0;
     vals = Array(width).fill(0);
     norms = Array(width).fill(0);
     maxIter = slider.value();
+    setDistFunc();
   });
-
-  slider = createSlider(500, 5000, maxIter, 100);
-  slider.position(20, HEIGHT + 30);
-  slider.style('width', '400px');
-  sliderP = createP(slider.value());
-  sliderP.position(40, HEIGHT + 50);
 
   vals = Array(width).fill(0);
   norms = Array(width).fill(0);
@@ -76,7 +110,7 @@ function draw() {
 
   if (!done) {
     // Draw a sample between (0, 1)
-    sampleNumber = monteCarlo();
+    sampleNumber = monteCarlo(distFunc);
     bin = int(sampleNumber * width);
     vals[bin] += 1 * MULTIPLIER;
 
@@ -99,6 +133,10 @@ function draw() {
     drawLoop++;
   } else {
     moveAvgs = calcEWMA(vals);
+    const maxElem = Math.max(...moveAvgs);
+    for (let i = 0; i < moveAvgs.length; i++) {
+      moveAvgs[i] = moveAvgs[i]/maxElem * height;
+    }
     // Keep drawing vertical bar after done
     // And draw moving average line
     for (let x = 0; x < vals.length; x++) {
