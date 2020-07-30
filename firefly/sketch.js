@@ -17,7 +17,7 @@ function setup() {
 }
 
 function draw() {
-  background(0, 0, 55);
+  background(0, 0, 59);
 
   const mousePos = createVector(mouseX, mouseY);
   const mouseVel = createVector(winMouseX - pwinMouseX, winMouseY - pwinMouseY);

@@ -129,7 +129,7 @@ function setup() {
 }
 
 function draw() {
-  background(220);
+  background(150, 191, 230);
   stroke(0);
   strokeWeight(8);
   line(0, HEIGHT, WIDTH, HEIGHT);
