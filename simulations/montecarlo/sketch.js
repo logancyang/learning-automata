@@ -6,10 +6,9 @@ let maxBinCount;
 let moveAvgs;
 let selected = 'gaussian';
 let distFunc;
-let misses = [];
-let hits = [];
 let distFuncCurve = [];
 let maxyCoord = 0;
+let darts;
 
 const WIDTH = 600;
 const HEIGHT = 300;
@@ -18,13 +17,6 @@ const MARGIN = 1.25;
 const MIN_TRIALS = 500;
 const MAX_TRIALS = 5000;
 
-// function mousePressed() {
-//   loop();
-// }
-
-// function mouseReleased() {
-//   noLoop();
-// }
 
 function square(x) {
   return x * x;
@@ -35,16 +27,6 @@ function gaussian(x) {
   const s = 0.1;
   const z = (x - u)/s;
   return Math.exp(-z*z/2) / (Math.sqrt(2*PI) * s);
-}
-
-function monteCarloTrial(func, maxX=1, maxY=1) {
-  const sampleX = random(maxX);
-  const sampleY = random(maxY);
-  const targetY = func(sampleX);
-  if (sampleY < targetY) {
-    return [sampleX, sampleY, true];
-  }
-  return [sampleX, sampleY, false];
 }
 
 // Calculate exponentially weighted moving average
@@ -66,18 +48,8 @@ function setDistFunc() {
   }
 }
 
-function resetCanvas() {
-  done = false;
-  drawLoop = 0;
-  vals = Array(WIDTH).fill(0);
-  norms = Array(WIDTH).fill(0);
-  maxIter = slider.value();
-  setDistFunc();
-  misses = [];
-  hits = [];
-  distFuncCurve = [];
-  maxyCoord = 0;
-  // Create distFunc curve
+function createDistFuncCurve() {
+  // Fill global variables: distFuncCurve and maxyCoord
   for (let x = 0; x < WIDTH; x++) {
     const xCoord = map(x, 0, WIDTH, 0, 1);
     const yCoord = distFunc(xCoord);
@@ -88,23 +60,35 @@ function resetCanvas() {
   }
 }
 
+function resetCanvas() {
+  done = false;
+  drawLoop = 0;
+  vals = Array(WIDTH).fill(0);
+  norms = Array(WIDTH).fill(0);
+  maxIter = slider.value();
+  darts.reset();
+  setDistFunc();
+  // Reset distFuncCurve
+  maxyCoord = 0;
+  distFuncCurve = [];
+  createDistFuncCurve();
+}
+
 
 function setup() {
   canvas = createCanvas(WIDTH, HEIGHT*2);
   canvas.style('margin-top', '30px');
   canvas.style('margin-left', 'auto');
   canvas.style('margin-right', 'auto');
-  canvas.style("outline", "black 3px solid");
+  canvas.style("outline", "blue 3px solid");
   canvas.parent("sketch-holder");
 
   slider = createSlider(MIN_TRIALS, MAX_TRIALS, maxIter, 100);
   slider.parent("sketch-slider");
   slider.style('width', '300px');
-  // slider.style('horizontal-align', 'middle');
 
   sliderP = createP(slider.value());
   sliderP.parent("sketch-slider");
-  // sliderP.style('align', 'middle');
 
   setDistFunc();
 
@@ -117,15 +101,9 @@ function setup() {
   vals = Array(WIDTH).fill(0);
   norms = Array(WIDTH).fill(0);
 
-  // Create distFunc curve
-  for (let x = 0; x < WIDTH; x++) {
-    const xCoord = map(x, 0, WIDTH, 0, 1);
-    const yCoord = distFunc(xCoord);
-    distFuncCurve.push([xCoord, yCoord]);
-    if (yCoord > maxyCoord) {
-      maxyCoord = yCoord;
-    }
-  }
+  createDistFuncCurve();
+
+  darts = new Darts(height, maxyCoord);
 }
 
 function draw() {
@@ -146,19 +124,9 @@ function draw() {
   }
 
   if (!done) {
-    // Draw a sample between (0, 1)
-    const [sampleX, sampleY, hit] = monteCarloTrial(
-      distFunc, 1, maxyCoord * (MARGIN - 0.05)
-    );
-    // Draw dart
-    const dartX = int(sampleX * WIDTH);
-    const dartYAdj = sampleY/(maxyCoord * MARGIN);
-    const dartY = map(dartYAdj, 0, 1, 0, HEIGHT);
-    if (!hit) {
-      misses.push([dartX, dartY]);
-    } else {
-      hits.push([dartX, dartY]);
-      sampleNumber = sampleX;
+    const dart = darts.throwDart(distFunc);
+    if (dart.hit) {
+      sampleNumber = dart.x;
       bin = int(sampleNumber * WIDTH);
       vals[bin] += 1 * MULTIPLIER;
 
@@ -203,19 +171,7 @@ function draw() {
     line(x, HEIGHT, x, HEIGHT-norms[x]);
   }
 
-  for (let i = 0; i < misses.length; i++) {
-    const [missX, missY] = misses[i];
-    stroke('red');
-    strokeWeight(4);
-    point(missX, height-missY);
-  }
-
-  for (let i = 0; i < hits.length; i++) {
-    const [hitX, hitY] = hits[i];
-    stroke('blue');
-    strokeWeight(4);
-    point(hitX, height-hitY);
-  }
+  darts.show();
 
   textSize(16);
   noStroke();
