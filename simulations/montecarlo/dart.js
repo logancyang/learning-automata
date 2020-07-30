@@ -46,8 +46,9 @@ class Darts {
     return dart;
   }
 
-  reset() {
+  reset(maxyFuncValue) {
     this.darts = [];
+    this.maxyFuncValue = maxyFuncValue;
   }
 
   show() {

@@ -42,18 +42,29 @@
   <div class="container">
     <div id="sketch-holder" class="row"></div>
     <div id="sketch-reset" class="row" style="margin: 20px"></div>
-    <div id="sketch-slider" class="row" style="margin-left: 35%; display: inline-block; vertical-align: middle;"></div>
-    <div id="mc-description" class="row" style="margin: auto; margin-top: 50px;font-family:Courier;">
-      <p>To visualize the motivation behind rejection sampling, imagine graphing
-        the density function of a random variable onto a large rectangular board
-        and throwing darts at it. Assume that the darts are uniformly distributed
-        around the board. Now remove all of the darts that are outside the area
-        under the curve. The remaining darts will be distributed uniformly within
-        the area under the curve, and the x-positions of these darts will be
-        distributed according to the random variable's density. This is because
-        there is the most room for the darts to land where the curve is highest and
-        thus the probability density is greatest.</p>
-        <p>In this <a href="https://youtu.be/DfziDXHYoik">Nature of Code video</a> by Dan Shiffman, this algorithm is explained as the "2-number method".</p>
+    <div id="sketch-dist-picker" style="text-align: center;">
+      <input type="radio" name="dist" value="gaussian" checked="checked"> Gaussian (mean=0.5 std=0.1)
+      <input type="radio" name="dist" value="pareto"> Pareto
+      <input type="radio" name="dist" value="uniform"> Uniform
+      <input type="radio" name="dist" value="square"> x^2
+    </div>
+    <div id="sketch-slider" class="row"
+      style="margin-top: 20px; margin-left: 37%; display: inline-block; vertical-align: middle;"></div>
+    <div id="mc-description" class="row"
+      style="margin: auto; margin-bottom: 60px; margin-top: 50px;font-family:Courier;">
+      <h2>Rejection Sampling: A Monte Carlo Method</h2>
+      <p>To visualize the motivation behind rejection sampling, the canvas above graphs your selected density function
+        of a random variable onto a rectangular board, and it throws "darts" at it. The darts are uniformly distributed
+        around the board. Now remove all of the darts that are outside the area under the curve (the red ones). The
+        remaining darts will be distributed uniformly within the area under the curve, and the x-positions of these
+        darts will be distributed according to the random variable's density. This is because there is the most room for
+        the darts to land where the curve is highest and thus the probability density is greatest.</p>
+      <p>
+        Once the simulation is done, the top half plots a yellow outline of the histogram to show the shape of the
+        simulated distribution. It is obtained by calculating an exponentially weighted moving average.
+      </p>
+      <p>In this <a href="https://youtu.be/DfziDXHYoik">Nature of Code video</a> by Dan Shiffman, this algorithm is
+        explained as the "2-number method".</p>
     </div>
   </div>
 

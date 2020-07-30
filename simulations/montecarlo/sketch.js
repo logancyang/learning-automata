@@ -1,7 +1,7 @@
 let vals, norms;
 let drawLoop = 0;
 let done = false;
-let maxIter = 800;
+let maxIter = 2000;
 let maxBinCount;
 let moveAvgs;
 let selected = 'gaussian';
@@ -9,11 +9,13 @@ let distFunc;
 let distFuncCurve = [];
 let maxyCoord = 0;
 let darts;
+let MARGIN = 1.25;
 
 const WIDTH = 600;
 const HEIGHT = 300;
 const MULTIPLIER = 25;
-const MARGIN = 1.25;
+
+const Y_LIMIT = 10;
 const MIN_TRIALS = 500;
 const MAX_TRIALS = 5000;
 
@@ -22,11 +24,19 @@ function square(x) {
   return x * x;
 }
 
+function pareto(x) {
+  return Math.pow(x, -1);
+}
+
 function gaussian(x) {
   const u = 0.5;
   const s = 0.1;
   const z = (x - u)/s;
   return Math.exp(-z*z/2) / (Math.sqrt(2*PI) * s);
+}
+
+function uniform(x) {
+  return 1;
 }
 
 // Calculate exponentially weighted moving average
@@ -41,10 +51,16 @@ function calcEWMA(values, alpha=0.1) {
 }
 
 function setDistFunc() {
+  MARGIN = 1.25;
+  selected = document.querySelector('input[name="dist"]:checked').value;
   if (selected === 'gaussian') {
     distFunc = gaussian;
   } else if (selected === 'square') {
     distFunc = square;
+  } else if (selected === 'pareto') {
+    distFunc = pareto;
+  } else if (selected === 'uniform') {
+    distFunc = uniform;
   }
 }
 
@@ -52,7 +68,11 @@ function createDistFuncCurve() {
   // Fill global variables: distFuncCurve and maxyCoord
   for (let x = 0; x < WIDTH; x++) {
     const xCoord = map(x, 0, WIDTH, 0, 1);
-    const yCoord = distFunc(xCoord);
+    let yCoord = distFunc(xCoord);
+    if (yCoord > Y_LIMIT) {
+      MARGIN = 1;
+      yCoord = Y_LIMIT;
+    }
     distFuncCurve.push([xCoord, yCoord]);
     if (yCoord > maxyCoord) {
       maxyCoord = yCoord;
@@ -66,12 +86,12 @@ function resetCanvas() {
   vals = Array(WIDTH).fill(0);
   norms = Array(WIDTH).fill(0);
   maxIter = slider.value();
-  darts.reset();
   setDistFunc();
   // Reset distFuncCurve
   maxyCoord = 0;
   distFuncCurve = [];
   createDistFuncCurve();
+  darts.reset(maxyCoord);
 }
 
 
