@@ -27,6 +27,10 @@
   max-width: 40rem;
 }
 
+body {
+  font-family: 'Esteban', serif;
+}
+
 footer {
   padding-top: 3rem;
   padding-bottom: 3rem;
