@@ -1,6 +1,8 @@
 const DEFAULTCOLORSET = [108, 240, 104];
 const GLOWALPHA = 200;
 const MAX_VELOCITY = 0.5;
+const MIN_RADIUS = 0.8;
+const MAX_RADIUS = 5;
 
 
 class Firefly extends Particle {
@@ -90,7 +92,7 @@ class FireflyGroup {
       x: random(this.width),
       y: random(this.height/2, this.height),
       mass: 100,
-      radius: random(1, 8),
+      radius: random(MIN_RADIUS, MAX_RADIUS),
       vx: 0,
       vy: 0,
       offset: int(random(1000)),
