@@ -66,7 +66,7 @@ function showText(showEnglish, distances) {
 }
 
 function setup() {
-  const canvas = createCanvas(windowWidth, 1000);
+  const canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent("canvas-trisolaris");
 
   const randomEpoch = int(random(8000, 10000));
